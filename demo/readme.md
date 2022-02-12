@@ -1,14 +1,4 @@
 # chrome extension example 
-    ├── background.js   //  init js when install extension
-    ├── content.js      // access & write page dom
-    └── stackoverflow_content.js
-    ├── document_start.js   // access & write page be
-
-    // inject js, see https://developer.chrome.com/docs/extensions/mv3/content_scripts/
-    ├── inject_start.js 
-
-config: 
-
 ```javascript
 {
     "name": "ahuigo dev",
