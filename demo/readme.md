@@ -1,4 +1,8 @@
 # chrome extension example 
+    ├── background.js   //  init js when install extension
+    ├── content.js      // access & write page dom
+    ├── document_start.js   // access & write page before document start
+
 ```javascript
 {
     "name": "ahuigo dev",
