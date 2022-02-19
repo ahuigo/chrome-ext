@@ -15,3 +15,23 @@ function getTitle(request, sender, sendResponse) {
     let title = hnode.innerText || "no title"
   return sendResponse({ title: title });
 }
+
+function cleanZhihu(){
+    // copy selector
+    switch(location.pathname){
+        case '/hot':
+        case '/':
+            location.href='https://gfw.go101.org/article/101.html'
+            break
+        default:
+            document.querySelector('#root  header').remove()
+    }
+}
+(function init(){
+    switch(location.hostname){
+        case 'www.zhihu.com':
+        case 'zhihu.com': cleanZhihu();break;
+    }
+    console.log(location.href)
+})()
+

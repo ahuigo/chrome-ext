@@ -1,4 +1,4 @@
-# access reject.js example
+# access inject.js example
 Refer: https://stackoverflow.com/questions/9602022/chrome-extension-retrieving-global-variable-from-webpage/9636008#9636008
 
     contentinject.js ("run_at": "document_end" in manifest):
