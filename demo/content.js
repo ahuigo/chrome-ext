@@ -21,7 +21,7 @@ function cleanZhihu(){
     switch(location.pathname){
         case '/hot':
         case '/':
-            location.href='https://gfw.go101.org/article/101.html'
+            location.href='https://geektutu.com/post/hpg-pprof.html'
             break
         default:
             document.querySelector('#root  header').remove()
