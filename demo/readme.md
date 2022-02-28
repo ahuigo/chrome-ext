@@ -33,7 +33,7 @@
         }
     ],
     "web_accessible_resources": [{
-      "resources": ["inject_start.js"],
+      "resources": ["content_inject_start.js"],
       "matches": ["<all_urls>"]
     }],
 

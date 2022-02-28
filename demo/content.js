@@ -16,13 +16,10 @@ function getTitle(request, sender, sendResponse) {
   return sendResponse({ title: title });
 }
 
+// handle website
 function cleanZhihu(){
     // copy selector
     switch(location.pathname){
-        case '/hot':
-        case '/':
-            location.href='https://geektutu.com/post/hpg-pprof.html'
-            break
         default:
             document.querySelector('#root  header').remove()
     }
