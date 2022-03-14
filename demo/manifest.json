@@ -14,11 +14,11 @@
       },
       {
         "matches": ["*://*.stackoverflow.com/*"],
-        "js": ["stackoverflow_content.js"]
+        "js": ["document_stackoverflow.js"]
       },
       {
           "matches": ["<all_urls>"],
-          "js": ["content.js"],
+          "js": ["document_end.js"],
           "run_at": "document_end"
         }
     ],

@@ -14,7 +14,11 @@ function cleanZhihu(){
             location.href='https://geektutu.com/post/hpg-range.html'
             break
         default:
-            document.querySelector('#root  header').remove()
+            let h = document.querySelector('#root  header')
+            h && h.remove()
+            h = document.querySelector('div>.App-main .SearchSideBar')
+            h && h.remove()
+
     }
 }
 (function init(){

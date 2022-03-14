@@ -21,7 +21,11 @@ function cleanZhihu(){
     // copy selector
     switch(location.pathname){
         default:
-            document.querySelector('#root  header').remove()
+            let h = document.querySelector('div>.App-main .SearchSideBar')
+            h && h.remove()
+            h = document.querySelector('#root  header')
+            h && h.remove()
+
     }
 }
 (function init(){
@@ -29,6 +33,6 @@ function cleanZhihu(){
         case 'www.zhihu.com':
         case 'zhihu.com': cleanZhihu();break;
     }
-    console.log(location.href)
+    console.log('document_end:',location.href)
 })()
 
