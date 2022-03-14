@@ -16,6 +16,14 @@ function getTitle(request, sender, sendResponse) {
   return sendResponse({ title: title });
 }
 
+function cleanBaidu(){
+    let div=document.querySelector('#content_right')
+    if(div){
+        div.remove()
+    }
+}
+
+
 // handle website
 function cleanZhihu(){
     // copy selector
@@ -32,6 +40,7 @@ function cleanZhihu(){
     switch(location.hostname){
         case 'www.zhihu.com':
         case 'zhihu.com': cleanZhihu();break;
+        case 'www.baidu.com': cleanBaidu();break;
     }
     console.log('document_end:',location.href)
 })()
