@@ -10,8 +10,10 @@ function cleanZhihu(){
     // copy selector
     switch(location.pathname){
         case '/hot':
+        case '/zvideo':
         case '/':
             location.href='https://geektutu.com/post/hpg-range.html'
+            location.href='http://dev-pm-ui.hdmap.momenta.works/workflow/common'
             break
         default:
             let h = document.querySelector('#root  header')
