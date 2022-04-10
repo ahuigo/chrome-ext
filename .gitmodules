@@ -1,0 +1,6 @@
+[submodule "chrome-stackoverflow"]
+	path = chrome-stackoverflow
+	url = git@github.com:ahuigo/chrome-stackoverflow.git
+[submodule "chrome-ext-fiddle"]
+	path = chrome-ext-fiddle
+	url = git@github.com:ahuigo/chrome-ext-fiddle

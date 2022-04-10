@@ -8,13 +8,19 @@
     },
     "content_scripts": [
       {
+        "js": ["document_stackoverflow.js"],
+        "matches": [
+            "https://stackoverflow.com/*",
+            "https://*.stackoverflow.com/*",
+            "https://superuser.com/*",
+            "https://serverfault.com/*",
+            "https://*.stackexchange.com/*"
+        ]
+      },
+      {
             "matches": ["<all_urls>"],
             "js": ["document_start.js"],
             "run_at": "document_start" //default document end
-      },
-      {
-        "matches": ["*://*.stackoverflow.com/*"],
-        "js": ["document_stackoverflow.js"]
       },
       {
           "matches": ["<all_urls>"],
