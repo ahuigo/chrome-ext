@@ -29,7 +29,7 @@
         }
     ],
     "web_accessible_resources": [{
-      "resources": ["content_inject_start.js"],
+      "resources": ["content_inject_start.js", "inject/ajax.js"],
       "matches": ["<all_urls>"]
     }],
 
