@@ -356,15 +356,15 @@ function fetchX(method='get', url, params=null, data=null){
 /**
  * sends a request to the specified url from a form. this will change the window location.
  */
-function requestForm( method = 'post', url, params) {
+function requestForm( method = 'post', url, data) {
   // The rest of this code assumes you are not using a library.
   // It can be made less verbose if you use one.
   const form = document.createElement('form');
   form.method = method;
   form.action = url;
 
-  if(params){
-      for (const [key, value] of Object.entries(params)) {
+  if(data){
+      for (const [key, value] of Object.entries(data)) {
         const hiddenField = document.createElement('input');
         hiddenField.type = 'hidden';
         hiddenField.name = key;
