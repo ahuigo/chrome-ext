@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Options</title>
+    <meta charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <!-- -->
+    <template>
+      <table class="custom">
+        <tr>
+          <td colspan="7">
+            <input type="checkbox" class="state" title="Enable or disable the rule">
+            <input type="button" class="remove" value="✕" title="Remove rule">
+            <input type="button" class="save" value="Save" title="Save rule">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>When</label>
+          </td>
+          <td>
+            <select class="domain">
+              <option value="requestDomains">request domain</option>
+              <option value="initiatorDomains">initiator domain</option>
+            </select>
+          </td>
+          <td>
+            <label>is</label>
+          </td>
+          <td>
+            <input type="text" class="hostname" placeholder="example.com">
+          </td>
+          <td>
+            <label>and domain type is</label>
+          </td>
+          <td>
+            <select class="type">
+              <option value="firstParty">firstParty</option>
+              <option value="thirdParty">thirdParty</option>
+              <option value="all">BOTH (firstParty + thirdParty)</option>
+            </select>
+          </td>
+          <td>
+            <label>then, add the following response headers</label>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Access-Control-Allow-Origin</label>
+          </td>
+          <td colspan="6">
+            <input type="text" class="origin" placeholder="https://example.com">
+          </td>
+        </tr>                
+        <tr>
+          <td>
+            <label>Access-Control-Allow-Methods</label>
+          </td>
+          <td colspan="6">
+            <input type="text" class="methods" placeholder="example">
+          </td>
+        </tr>            
+        <tr>
+          <td>
+            <label>Access-Control-Allow-Headers</label>
+          </td>
+          <td colspan="6">
+            <input type="text" class="headers" placeholder="example">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Access-Control-Allow-Credentials</label>
+          </td>
+          <td colspan="6">
+            <input type="text" class="credentials" placeholder="true">
+          </td>
+        </tr>
+      </table>
+    </template>
+    <!-- -->
+    <div class="logo"></div>
+    <div class="container">
+      <div class="item column">
+        <div class="info">
+          <p>1. Access-Control-Allow-Methods</p>
+        </div>
+        <div class="content">
+          <p>Value</p>
+          <textarea id="methods"></textarea>
+        </div>
+      </div>
+      <div class="item row line">
+        <p class="note">Please specify the allowed methods when accessing external resources.</p>
+        <p class="note">Default methods are: PUT, GET, HEAD, POST, DELETE, OPTIONS</p>
+        <p class="note">Note 1: add or remove methods comma separated. All changes are auto-saved to the memory.</p>
+        <p class="note">Note 2: allowed methods are: PUT, GET, HEAD, POST, PATCH, DELETE, CONNECT, OPTIONS</p>
+        <p class="note">Note 3: if you add the PATCH method, please mark option #2.</p>
+      </div>
+      <!-- -->
+      <div class="item column">
+        <div class="info">
+          <p>2. Allow PATCH method</p>
+        </div>
+        <div class="content">
+          <p>Value</p>
+          <input type="checkbox" id="patch">
+        </div>
+      </div>
+      <div class="item row line">
+        <p class="note">Add the Access-Control-Allow-Methods value for - Allow - header when the request method is OPTION.</p>
+        <p class="note">Note: this option appends the - PATCH - method to the Access-Control-Allow-Methods value.</p>
+        <p class="note">Default is not active.</p>
+      </div>
+      <!-- -->
+      <div class="item column">
+        <div class="info">
+          <p>3. Access-Control-Allow-Headers</p>
+        </div>
+        <div class="content">
+          <p>Include</p>
+          <input type="checkbox" id="headers">
+        </div>
+      </div>
+      <div class="item row line">
+        <p class="note">Add * as the header value for Access-Control-Allow-Headers.</p>
+        <p class="note">Default value is active. Unmark this option to NOT change Access-Control-Allow-Headers.</p>
+      </div>
+      <!-- -->
+      <div class="item column">
+        <div class="info">
+          <p>4. Access-Control-Allow-Credentials</p>
+        </div>
+        <div class="content">
+          <p>Expose</p>
+          <input type="checkbox" id="credentials">
+        </div>
+      </div>
+      <div class="item row line">
+        <p class="note">Add - True - as the header value for Access-Control-Allow-Credentials.</p>
+        <p class="note">Default value is false. Mark this option to make the value true.</p>
+        <p class="note">Note 1: when this option is active, option #5 must be ORIGIN (initiator).</p>
+        <p class="note">Note 2: you may need to reload all open tabs for this option to work properly.</p>
+      </div>
+      <!-- -->
+      <div class="item column">
+        <div class="info">
+          <p>5. Access-Control-Allow-Origin</p>
+        </div>
+        <div class="content" style="text-align: right">
+          <label for="origin-all" title="All origins">*</label>
+          <input type="radio" name="origin" id="origin-all" title="All origins">
+          <label for="origin-top" title="Top origin (initiator)">Origin</label>
+          <input type="radio" name="origin" id="origin-top" title="Top origin (initiator)">
+        </div>
+      </div>
+      <div class="item row line">
+        <p class="note">Choose a value for Access-Control-Allow-Origin (* or ORIGIN).</p>
+        <p class="note">Note 1: in manifest version 3, this value is also set for all - redirected - URLs.</p>
+        <p class="note">Note 2: when - ORIGIN - is chosen, please reload all open tabs for this option to work properly.</p>
+        <p class="note">Default value is: ORIGIN (initiator)</p>
+      </div>
+      <!-- -->
+      <div class="item column">
+        <div class="info">
+          <p>6. Allow CORS target frame(s)</p>
+        </div>
+        <div class="content" style="text-align: right">
+          <label for="main_frame" title="Main frame">main_frame</label>
+          <input type="checkbox" id="main_frame" title="Main frame">
+          <label for="sub_frame" title="Sub frame">sub_frame</label>
+          <input type="checkbox" id="sub_frame" title="Sub frame">
+        </div>
+      </div>
+      <div class="item row line">
+        <p class="note">Add ORIGIN as the header value (Access-Control-Allow-Origin) for main_frame and/or sub_frame.</p>
+        <p class="note">Note 1: when this option is changed, please reload all open tabs for changes to take effect.</p>
+        <p class="note">Note 2: this option is active when option #5 is set to ORIGIN.</p>
+        <p class="note">Default value is main_frame & sub_frame.</p>
+      </div>
+      <!-- -->
+      <div class="item column">
+        <div class="info">
+          <p>7. Allow CORS domain type</p>
+        </div>
+        <div class="content" style="text-align: right">
+          <label for="firstParty" title="firstParty">first_party</label>
+          <input type="radio" name="domain" id="firstParty" title="firstParty">
+          <label for="thirdParty" title="thirdParty">third_party</label>
+          <input type="radio" name="domain" id="thirdParty" title="thirdParty">
+          <label for="all" title="firstParty + thirdParty">Both</label>
+          <input type="radio" name="domain" id="all" title="firstParty + thirdParty">
+        </div>
+      </div>
+      <div class="item row line">
+        <p class="note">Enable allow CORS for firstParty, thirdParty or all requests.</p>
+        <p class="note">Note: when this option is changed, please reload all open tabs for changes to take effect.</p>
+        <p class="note">Default value is: Both (firstParty + thirdParty)</p>
+      </div>
+      <!-- -->
+      <div class="item row line">
+        <div class="info">
+          <p>8. Allow CORS whitelisted domain(s)</p>
+          <p class="note">When CORS is allowed in your browser, for the following domains, CORS is disabled.</p>
+          <p class="note">Note: add or remove domains comma separated. All changes are auto-saved to the memory.</p>
+        </div>
+        <div class="content">
+          <textarea id="whitelist"></textarea>
+        </div>
+      </div>
+      <!-- -->
+      <div class="item column">
+        <div class="info">
+          <p>9. Custom CORS rules</p>
+        </div>
+        <div class="content" style="text-align: right">
+          <input type="button" id="add" value="Add a rule">
+        </div>
+      </div>
+      <div class="item row">
+        <div class="info">
+          <p class="note">Add custom CORS rules here (i.e. rule for CORS preflight request).</p>
+          <p class="note">Note 1: click on the - Add a rule - button below to place the rule table, then fill the table with desired values.</p>
+          <p class="note">Note 2: custom rules have higher priority than any of the above conditions.</p>
+          <p class="note">Note 3: you can enable or disable a rule by marking the checkbox (top-left corner).</p>
+          <p class="note">Note 4: pressing the remove button will permanently remove the custom rule.</p>
+          <p class="note">Note 5: please press the - SAVE - button to save changes for the current rule.</p>
+        </div>
+        <!-- -->
+        <div class="content" id="custom"></div>
+      </div>
+    </div>
+    <!-- -->
+    <script type="text/javascript" src="options.js"></script>
+  </body>
+</html>

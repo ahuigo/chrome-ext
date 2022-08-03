@@ -36,12 +36,31 @@ function cleanZhihu(){
 
     }
 }
+function cleanBilibili(){
+    console.log('clean bilibili')
+    const selectors = [
+        '#internationalHeader',
+        '#bili-header-container',
+        '#biliMainHeader',
+        'div>.right-container',
+        //'div>.App-main .SearchSideBar',
+        //'#reco_list',
+    ]
+    for(const q of selectors){
+        const dom = document.querySelector(q)
+        dom && dom.remove()
+    }
+}
 (function init(){
     switch(location.hostname){
         case 'www.zhihu.com':
         case 'zhihu.com': cleanZhihu();break;
         case 'www.baidu.com': cleanBaidu();break;
     }
+    if(location.hostname.match(/\.bilibili\.com$/)){
+        cleanBilibili()
+    }
+
     console.log('document_end:',location.href)
 })()
 

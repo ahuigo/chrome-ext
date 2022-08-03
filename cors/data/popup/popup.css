@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  padding: 0;
+  color: #555;
+  width: 550px;
+  font-size: 13px;
+  overflow: hidden;
+  background-color: #FFF;
+  font-family: arial,sans-serif;
+}
+
+.content {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border-bottom: solid 1px rgba(0,0,0,0.1);
+}
+
+.content table {
+  width: 100%;
+  height: 100%;
+  border-spacing: 0;
+}
+
+.content table tr td {
+  border: 0;
+  margin: 0;
+  color: #555;
+  padding: 5px;
+  text-indent: 0;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: arial,sans-serif;
+}
+
+.content .buttons tr td {
+  padding: 5px 0;
+}
+
+.content .buttons .icon {
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  user-select: none;
+  line-height: 28px;
+  text-align: center;
+  display: inline-block;
+}
+
+.content .buttons .icon svg {
+  fill: #676767;
+  margin: -2px 0 0 0;
+  vertical-align: middle;
+}
+
+.content .buttons .text {
+  padding: 0;
+  width: auto;
+  height: 28px;
+  font-size: 12px;
+  text-align: left;
+  user-select: none;
+  line-height: 28px;
+  display: inline-block;
+  font-family: arial,sans-serif;
+}
+
+.content table tr td[class='toggle'] {
+  width: 64px;
+  position: relative;
+}
+
+.content table tr td[class='toggle']::before {
+  bottom: 0;
+  left: 2px;
+  color: #bbb;
+  font-size: 11px;
+  position: absolute;
+  pointer-events: none;
+  font-family: monospace;
+  content: "Toggle ON|OFF";
+}
+
+.content table tr td[class='toggle'][state='ON'] {
+  background: url("../icons/ON/128.png") no-repeat center center;
+  background-size: 64px;
+}
+
+.content table tr td[class='toggle'][state='OFF'] {
+  background: url("../icons/OFF/128.png") no-repeat center center;
+  background-size: 64px;
+}
+
+.content .buttons tr td {
+  transition: 100ms ease all;
+}
+
+.content .buttons tr td:hover {
+  color: #333;
+  background-color: rgba(0,0,0,0.01);
+}
+
+.content .border {
+  border-right: solid 1px rgba(0,0,0,0.1);
+}
+
+.content .buttons .whitelist[added] {color: #1c78cf}
+.content .buttons .whitelist[error] {color: #f05228}

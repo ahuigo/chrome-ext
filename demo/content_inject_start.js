@@ -10,23 +10,39 @@ function initUA(){
     }});
 }
 
+function twork(){
+    // ahui idea
+    //location.href='https://geektutu.com/post/hpg-range.html'
+    location.href='https://www.reddit.com/r/Deno/'
+}
 function cleanZhihu(){
     // copy selector
     switch(location.pathname){
         case '/hot':
         case '/zvideo':
         case '/':
-            //location.href='https://geektutu.com/post/hpg-range.html'
-            location.href='https://www.reddit.com/r/Deno/'
-            break
+            return twork()
         default:
             let h = document.querySelector('#root  header')
             h && h.remove()
             h = document.querySelector('div>.App-main .SearchSideBar')
             h && h.remove()
-
     }
 }
+function cleanBilibili(){
+
+    const blackPaths = [
+        /^\/$/,
+        /^\/v\//,
+    ]
+    for(const bpath of blackPaths){
+        console.log('bpath:',bpath)
+        if(location.pathname.match(bpath)){
+            twork(); 
+        }
+    }
+}
+
 
 // cookie proxy ///////////////////////////////////////
 function proxyCookie(){
@@ -51,6 +67,7 @@ function proxyCookie(){
     switch(location.hostname){
         case 'www.zhihu.com':
         case 'zhihu.com': cleanZhihu();break;
+        case 'www.bilibili.com': cleanBilibili(); break;
         case 'm2': initUA();break;
     }
     proxyCookie();

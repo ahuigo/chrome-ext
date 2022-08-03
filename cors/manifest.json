@@ -1,0 +1,46 @@
+{
+   "action": {
+      "default_icon": {
+         "16": "data/icons/16.png",
+         "32": "data/icons/32.png",
+         "48": "data/icons/48.png",
+         "64": "data/icons/64.png"
+      },
+      "default_popup": "data/popup/popup.html",
+      "default_title": "Access-Control-Allow-Origin"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "commands": {
+      "toggle-state": {
+         "description": "Access-Control-Allow-Origin",
+         "suggested_key": {
+            "default": "Ctrl+Shift+D",
+            "mac": "Command+Shift+D"
+         }
+      }
+   },
+   "description": "Easily add (Access-Control-Allow-Origin: *) rule to the response header.",
+   "homepage_url": "https://mybrowseraddon.com/access-control-allow-origin.html",
+   "host_permissions": [ "\u003Call_urls>" ],
+   "icons": {
+      "128": "data/icons/128.png",
+      "16": "data/icons/16.png",
+      "32": "data/icons/32.png",
+      "48": "data/icons/48.png",
+      "64": "data/icons/64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlpxRQFlDZ1MtX7zcAe3JEMB1DHDd9w2ULsQtddkvca1EKPQdkmNHnzrlLY4iqXFC/cu8oXkNjhwoWlwwYwD7G/TelYaBrfso1IfhQc6zj3eaNt6srZZNs4VckDkxOEiy/gV4o6sugBSZy1OfjA5oRQg3SKSFZlUySe//zxhOzTv8dPsakEjeF0bOOH3J6fYwUqsBPt9vHUhQwSwoC0jMiuLXiYnL4jYkgAv/Y5naTjJXv+C5rBAI7WN8mx2KTF2RKKmczHZjw6xcaU3/RaedVB2L7EC9H1+dM/ueDbw5Uf5/EN45zi9Rsc7DC5Pv5p1Jxtj6cD8GoDfZPaITUSyq5QIDAQAB",
+   "manifest_version": 3,
+   "name": "Allow CORS: Access-Control-Allow-Origin",
+   "offline_enabled": true,
+   "options_ui": {
+      "open_in_tab": true,
+      "page": "data/options/options.html"
+   },
+   "permissions": [ "storage", "webRequest", "declarativeNetRequest" ],
+   "short_name": "access-control-allow-origin",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.1.8"
+}
