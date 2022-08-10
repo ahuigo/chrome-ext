@@ -308,6 +308,9 @@
   }
 }
 window.Ajax = Ajax;
+setTimeout(()=>{
+    console.log({c:window._config})
+},5000)
 // Ajax.onErrorHandler(msg => {
 //     Notify.error(msg);
 // })

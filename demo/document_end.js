@@ -26,30 +26,30 @@ function cleanBaidu(){
 
 // handle website
 function cleanZhihu(){
-    // copy selector
-    switch(location.pathname){
-        default:
-            let h = document.querySelector('div>.App-main .SearchSideBar')
-            h && h.remove()
-            h = document.querySelector('#root  header')
-            h && h.remove()
-
+    const selectors = [
+        'div>.App-main .SearchSideBar',
+        '.Question-sideColumn',
+        '#root  header',
+    ]
+    cleanSelectors(selectors)
+}
+function cleanSelectors(selectors){
+    for(const q of selectors){
+        const dom = document.querySelector(q)
+        dom && dom.remove()
     }
 }
+
 function cleanBilibili(){
     console.log('clean bilibili')
     const selectors = [
-        '#internationalHeader',
         '#bili-header-container',
         '#biliMainHeader',
         'div>.right-container',
         //'div>.App-main .SearchSideBar',
         //'#reco_list',
     ]
-    for(const q of selectors){
-        const dom = document.querySelector(q)
-        dom && dom.remove()
-    }
+    cleanSelectors(selectors)
 }
 (function init(){
     switch(location.hostname){
@@ -60,6 +60,9 @@ function cleanBilibili(){
     if(location.hostname.match(/\.bilibili\.com$/)){
         cleanBilibili()
     }
+    setTimeout(()=>{
+        console.log({c2:window._config})
+    }, 5000)
 
     console.log('document_end:',location.href)
 })()
