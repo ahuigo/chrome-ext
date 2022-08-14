@@ -11,5 +11,5 @@ function injectScript(src) {
     };
     (document.head || document.documentElement).appendChild(s);
 }
-injectScript('content_inject_start.js')
+injectScript('document_start_inject.js')
 injectScript('inject/ajax.js')

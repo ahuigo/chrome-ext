@@ -43,13 +43,25 @@ function cleanSelectors(selectors){
 function cleanBilibili(){
     console.log('clean bilibili')
     const selectors = [
-        '#bili-header-container',
+        '#reco_list',//推荐
+        '#internationalHeader',
         '#biliMainHeader',
-        'div>.right-container',
-        //'div>.App-main .SearchSideBar',
-        //'#reco_list',
+        //'#bili-header-container',
     ]
     cleanSelectors(selectors)
+    const r=document.querySelector('div>.right-container')
+    if(r){
+        const tmp = []
+        const subs = [ '#v_upinfo', '#multi_page' ]
+        for(const q of subs){
+            const dom = document.querySelector(q)
+            dom && tmp.push(dom)
+        }
+        r.innerHTML=''
+        for(const d of tmp){
+            r.appendChild(d)
+        }
+    }
 }
 (function init(){
     switch(location.hostname){

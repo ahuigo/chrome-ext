@@ -31,13 +31,11 @@ function cleanZhihu(){
     }
 }
 function cleanBilibili(){
-
     const blackPaths = [
         /^\/$/,
         /^\/v\//,
     ]
     for(const bpath of blackPaths){
-        console.log('bpath:',bpath)
         if(location.pathname.match(bpath)){
             twork(); 
         }

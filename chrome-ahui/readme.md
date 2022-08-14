@@ -1,55 +1,58 @@
+# chrome extension example 
+    ├── background.js   //  init js when install extension
+    ├── content.js      // access & write page dom
+    ├── document_start.js   // access & write page before document start
+
+```javascript
 {
     "name": "ahuigo dev",
     "version": "1.0",
     "description": "ahui dev",
-    "minimum_chrome_version": "96",
     "manifest_version": 3,
     "background": {
       "service_worker": "background.js"
     },
+
+    // access & write page dom
     "content_scripts": [
-      {
-        "js": ["document_stackoverflow.js"],
-        "matches": [
-            "https://stackoverflow.com/*",
-            "https://*.stackoverflow.com/*",
-            "https://superuser.com/*",
-            "https://serverfault.com/*",
-            "https://*.stackexchange.com/*"
-        ]
-      },
       {
             "matches": ["<all_urls>"],
             "js": ["document_start.js"],
             "run_at": "document_start" //default document end
       },
       {
+        "matches": ["*://*.stackoverflow.com/*"],
+        "js": ["stackoverflow_content.js"]
+      },
+
+      // 
+      {
           "matches": ["<all_urls>"],
-          "js": ["document_end.js"],
+          "js": ["content.js"],
           "run_at": "document_end"
         }
     ],
     "web_accessible_resources": [{
-      "resources": ["content_inject_start.js", "inject/ajax.js"],
+      "resources": ["document_start_inject.js"],
       "matches": ["<all_urls>"]
     }],
 
+    // click popup page
     "action": {
       "default_popup": "popup.html"
     },
+
+    // extension icon's option menu
     "options_page": "options.html",
 
+    // permissions
     "host_permissions": [
-        "https://*/*",
-        "http://*/*"
+        "https://*/*"
     ],
     "permissions": [
-        "declarativeNetRequest",
-        "declarativeNetRequestWithHostAccess", //allow cors
-        "declarativeNetRequestFeedback",
         "tabs",
       "contextMenus",
       "storage", "activeTab", "scripting"
-
     ]
   }
+```
