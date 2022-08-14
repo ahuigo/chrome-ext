@@ -33,10 +33,22 @@ function cleanZhihu(){
     ]
     cleanSelectors(selectors)
 }
-function cleanSelectors(selectors){
-    for(const q of selectors){
-        const dom = document.querySelector(q)
-        dom && dom.remove()
+function sleep(t){
+    return new Promise((r)=>setTimeout(r,t))
+}
+async function cleanSelectors(selectors){
+    let i=5
+    while(i-->0){
+        for(const q of selectors){
+            const dom = document.querySelector(q)
+            dom && (i=0)
+            dom && dom.remove()
+        }
+        if(i<=0){
+            break
+        }
+        console.log('wait remain',i)
+        await sleep(40)
     }
 }
 
