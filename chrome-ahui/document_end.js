@@ -36,29 +36,34 @@ function cleanZhihu(){
 function sleep(t){
     return new Promise((r)=>setTimeout(r,t))
 }
-async function cleanSelectors(selectors){
+async function cleanSelectors(selectors, hide=false){
     let i=5
     while(i-->0){
         for(const q of selectors){
             const dom = document.querySelector(q)
             dom && (i=0)
-            dom && dom.remove()
+            if(hide){
+                dom && (dom.style.display='none')
+            }else{
+                dom && dom.remove()
+            }
+            
         }
         if(i<=0){
             break
         }
         console.log('wait remain',i)
-        await sleep(40)
+        await sleep(200)
     }
 }
 
-function cleanBilibili(){
+async function cleanBilibili(){
     console.log('clean bilibili')
     const selectors = [
         '#reco_list',//推荐
         '#internationalHeader',
         '#biliMainHeader',
-        //'#bili-header-container',
+        '#bili-header-container',
     ]
     cleanSelectors(selectors)
     const r=document.querySelector('div>.right-container')

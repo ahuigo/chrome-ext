@@ -26,7 +26,11 @@
       {
           "matches": ["<all_urls>"],
           "js": ["document_end.js"],
-          "run_at": "document_end"
+          "run_at": "document_end",
+          "exclude_matches": [
+            "http://localhost/",
+            "http://m"
+            ]
         }
     ],
     "web_accessible_resources": [{
