@@ -69,7 +69,7 @@ function proxyCookie(){
         case 'www.bilibili.com': cleanBilibili(); break;
         case 'm2': initUA();break;
     }
-    proxyCookie();
+    //proxyCookie();
     console.log(location.href)
 })()
 console.log("new navigator.platform:", navigator.platform)

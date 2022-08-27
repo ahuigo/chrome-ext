@@ -29,7 +29,7 @@
           "run_at": "document_end",
           "exclude_matches": [
             "http://localhost/",
-            "http://m"
+            "http://m/"
             ]
         }
     ],

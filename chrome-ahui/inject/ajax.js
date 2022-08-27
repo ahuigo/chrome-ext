@@ -1,7 +1,3 @@
-// import osmtogeojson from 'osmtogeojson';
-// import Notify from 'util/ui/Notify';
-// import User from 'api/User';
-
 /**
  * Ajax 接口封装
  */
@@ -25,10 +21,10 @@
       api.data = data;
       api.type = 'json';
       api.options = {
+          credentials: 'include', //omit if not send cookie
           ...api.options,
           ...options,
           method: method.toUpperCase(),
-          credentials: 'include'
       };
       return api;
   }
@@ -183,7 +179,7 @@
    *
    * @param {String} type 'json|form|urlencode'
    */
-  requestType(type = 'json') {
+  setType(type = 'json') {
       this.type = type;
       return this;
   }
@@ -271,7 +267,7 @@
   buildBody(data) {
       // this.addHeader({ 'Content-Type': 'application/octet-stream' });
       // options.body = options.file
-      var fd;
+      let fd;
       if (Object.prototype.toString.call(data) === '[object Object]') {
           fd = new FormData();
           for (var k in data) {
@@ -353,11 +349,11 @@ function fetchX(method='get', url, params=null, data=null){
     fetch('http://localhost:5001').then(response=>response.json()).then(json=>{
         vm.products=json.products
     })
-    */
+*/
 
 
 /**
- * sends a request to the specified url from a form. this will change the window location.
+ * sends a request to the specified url via a form. 
  */
 function requestForm( method = 'post', url, data) {
   // The rest of this code assumes you are not using a library.
