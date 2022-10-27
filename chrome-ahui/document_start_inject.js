@@ -70,6 +70,6 @@ function proxyCookie(){
         case 'm2': initUA();break;
     }
     //proxyCookie();
-    console.log(location.href)
+    console.debug(location.href)
 })()
-console.log("new navigator.platform:", navigator.platform)
+//console.log("new navigator.platform:", navigator.platform)

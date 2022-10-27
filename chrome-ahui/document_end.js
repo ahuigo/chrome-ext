@@ -90,9 +90,9 @@ async function cleanBilibili(){
         cleanBilibili()
     }
     setTimeout(()=>{
-        console.log({c2:window._config})
+        console.debug({c2:window._config})
     }, 5000)
 
-    console.log('document_end:',location.href)
+    console.debug('document_end:',location.href)
 })()
 
