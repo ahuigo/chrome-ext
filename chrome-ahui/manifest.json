@@ -34,7 +34,7 @@
         }
     ],
     "web_accessible_resources": [{
-      "resources": ["document_start_inject.js", "inject/ajax.js"],
+      "resources": ["inject/zhihu.js", "inject/ajax.js"],
       "matches": ["<all_urls>"]
     }],
 
