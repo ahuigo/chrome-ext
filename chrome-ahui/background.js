@@ -1,6 +1,17 @@
 // background.js
+import rules from "./background/rules.js"
 
-// change color
+/* 1. modifying headers of request
+ * refer:  https://stackoverflow.com/questions/3274144/can-i-modify-outgoing-request-headers-with-a-chrome-extension
+ */
+chrome.declarativeNetRequest.updateDynamicRules({
+  removeRuleIds: rules.map((rule) => rule.id), // remove existing rules
+  addRules: rules
+});
+
+/** 
+ * 2. storage: change color
+ */
 let color = '#3aa757';
 chrome.runtime.onInstalled.addListener(() => {
     console.dir(chrome.storage)
@@ -9,7 +20,8 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 
-/** CORS****************
+
+/** 3. Todo CORS****************
 // Ajax.request('https://gql.reddit.com/','post', {id:'xxx'}).then(d=>console.log(d))
 // Ajax.request('http://m:8000/','get').then(d=>console.log(d))
  * allow CORS Header

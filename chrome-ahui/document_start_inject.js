@@ -1,12 +1,22 @@
 // is called by document_start.js
 function initUA(){
+    /*
     Object.defineProperty(navigator, 'platform', {
         get: function(){
-            return "Android"
+            return "Android",//"MacIntel",
     }});
+    */
     Object.defineProperty(navigator, 'userAgent', {
         get: function(){
             return "User-Agent: Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Mobile Safari/537.36"
+    }});
+}
+
+function initUaEdge(){
+    console.log('initUaEdge')
+    Object.defineProperty(navigator, 'userAgent', {
+        get: function(){
+            return "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 13_2_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.50"
     }});
 }
 
@@ -68,8 +78,14 @@ function proxyCookie(){
         case 'zhihu.com': cleanZhihu();break;
         case 'www.bilibili.com': cleanBilibili(); break;
         case 'm2': initUA();break;
+        default:
+            switch (true) {
+              case /\.bing\.com$/.test(location.hostname):
+                    initUaEdge();
+                    break;
+            }
     }
     //proxyCookie();
-    console.debug(location.href)
+    //console.debug(location.href)
 })()
 //console.log("new navigator.platform:", navigator.platform)
