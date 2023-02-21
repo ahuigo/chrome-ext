@@ -20,6 +20,7 @@
         ]
       },
       {
+            "world": "MAIN",    // default: ISOLATED
             "matches": ["<all_urls>"],
             "js": ["document_start.js"],
             "run_at": "document_start" //default document end
