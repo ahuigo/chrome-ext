@@ -17,7 +17,7 @@ export default [
     },
     condition: {
         // http://m:4500/dump/modify-request-header
-      urlFilter: 'https://www.bing.com/',
+      urlFilter: 'https://www.bing21.com/',
       resourceTypes: allResourceTypes,
     }
   },

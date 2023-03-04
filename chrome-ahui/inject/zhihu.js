@@ -80,7 +80,7 @@ function proxyCookie(){
         case 'm2': initUA();break;
         default:
             switch (true) {
-              case /\.bing\.com$/.test(location.hostname):
+              case /\.bing211\.com$/.test(location.hostname):
                     initUaEdge();
                     break;
             }
