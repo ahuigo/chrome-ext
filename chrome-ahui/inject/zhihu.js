@@ -33,11 +33,12 @@ function cleanZhihu(){
         case '/zvideo':
         case '/':
             return twork()
-        default:
-            let h = document.querySelector('#root  header')
-            h && h.remove()
-            h = document.querySelector('div>.App-main .SearchSideBar')
-            h && h.remove()
+        default: {
+            let h = document.querySelector('#root  header');
+            h && h.remove();
+            h = document.querySelector('div>.App-main .SearchSideBar');
+            h && h.remove();
+        }
     }
 }
 function cleanBilibili(){
@@ -52,25 +53,6 @@ function cleanBilibili(){
     }
 }
 
-
-// cookie proxy ///////////////////////////////////////
-function proxyCookie(){
-    var cookieDesc = Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
-                 Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
-    if (cookieDesc && cookieDesc.configurable) {
-        Object.defineProperty(document, 'cookie', {
-            get: function () {
-                return cookieDesc.get.call(document);
-            },
-            set: function (val) {
-                console.log("set cookie",val);
-                //debugger;
-                //alert('set cookie:'+val)
-                cookieDesc.set.call(document, val);
-            }
-        });
-    }
-}
 
 (function init(){
     switch(location.hostname){

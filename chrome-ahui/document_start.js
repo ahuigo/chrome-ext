@@ -4,7 +4,7 @@
  * See https://stackoverflow.com/questions/9515704/use-a-content-script-to-access-the-page-context-variables-and-functions/9517879#9517879 
   */
 function injectScript(src) {
-    var s = document.createElement('script');
+    const s = document.createElement('script');
     s.src = chrome.runtime.getURL(src);
     s.onload = function() {
         this.remove();

@@ -16,7 +16,7 @@
    * @param {Object} options 'fetch options'
    */
   static request(url, method = 'get', data = null, options = {}) {
-      let api = new Ajax();
+      const api = new Ajax();
       api.url = url;
       api.data = data;
       api.type = 'json';

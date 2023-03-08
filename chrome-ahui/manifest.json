@@ -26,6 +26,7 @@
             "run_at": "document_start" //default document end
       },
       {
+          "world": "MAIN",    // default: ISOLATED
           "matches": ["<all_urls>"],
           "js": ["document_end.js"],
           "run_at": "document_end",

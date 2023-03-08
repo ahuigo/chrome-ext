@@ -11,13 +11,13 @@ chrome.runtime.onMessage.addListener(
 
 // Returns title
 function getTitle(request, sender, sendResponse) {
-  var hnode = document.getElementsByTagName('h1')[0];
-    let title = hnode.innerText || "no title"
+  const hnode = document.getElementsByTagName('h1')[0];
+  const title = hnode.innerText || "no title"
   return sendResponse({ title: title });
 }
 
 function cleanBaidu(){
-    let div=document.querySelector('#content_right')
+    const div=document.querySelector('#content_right')
     if(div){
         div.remove()
     }
@@ -36,6 +36,7 @@ function cleanZhihu(){
 function sleep(t){
     return new Promise((r)=>setTimeout(r,t))
 }
+
 async function cleanSelectors(selectors, hide=false){
     let i=5
     while(i-->0){
@@ -57,7 +58,7 @@ async function cleanSelectors(selectors, hide=false){
     }
 }
 
-async function cleanBilibili(){
+function cleanBilibili(){
     console.log('clean bilibili')
     const selectors = [
         '#reco_list',//推荐
@@ -96,3 +97,9 @@ async function cleanBilibili(){
     console.debug('document_end:',location.href)
 })()
 
+if(1){
+  const ht = window.document.querySelector('body').outerHTML.slice(0,10)+' ...'; //能获取
+  Window.prototype.ht = ht
+  console.log({ht:ht, window:window.ht}); 
+  //好像window/Window实例 绑定的值在本脚本结束后，会被清除
+}
