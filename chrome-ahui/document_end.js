@@ -1,21 +1,24 @@
-// listen for checkForWord request, call getTags which includes callback to sendResponse
+/**
+ * 1. listen event from popup/options/background
+ */
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
-    if (request.action === 'getTitle') {
+    if (request?.action === 'getTitle') {
       getTitle(request, sender, sendResponse);
       // this is required to use sendResponse asynchronously
       return true;
     }
   }
 );
-
-// Returns title
 function getTitle(request, sender, sendResponse) {
-  const hnode = document.getElementsByTagName('h1')[0];
-  const title = hnode.innerText || "no title"
+  console.log({request, sender, sendResponse})
+  const title = document.querySelector('h1')?.innerText || 'no title'
   return sendResponse({ title: title });
 }
 
+/**
+ * 2. clean page
+ */
 function cleanBaidu(){
     const div=document.querySelector('#content_right')
     if(div){
@@ -91,15 +94,20 @@ function cleanBilibili(){
         cleanBilibili()
     }
     setTimeout(()=>{
-        console.debug({c2:window._config})
+        console.debug({c2:window._config});// undefined, 因为和tab 的window是隔离
     }, 5000)
 
-    console.debug('document_end:',location.href)
-})()
+    console.debug('document_end url:',location.href)
+})();
 
-if(1){
-  const ht = window.document.querySelector('body').outerHTML.slice(0,10)+' ...'; //能获取
-  Window.prototype.ht = ht
-  console.log({ht:ht, window:window.ht}); 
-  //好像window/Window实例 绑定的值在本脚本结束后，会被清除
-}
+/**
+ * 3. set window in document_end.js
+ */
+(function setWindow(){
+  const ht2 = window.document.querySelector('body').outerHTML.slice(0,10)+' ...'; //能获取
+  Window.prototype.ht2 = ht2
+  Object.prototype.ht3 = 'ht3'
+  setTimeout(()=>{
+        console.debug({ht1:window.ht1, window_h2:window.ht2}); // 有值, 但是和tab的window 是隔离的
+  }, 1000)
+})();

@@ -6,10 +6,16 @@
 function injectScript(src) {
     const s = document.createElement('script');
     s.src = chrome.runtime.getURL(src);
+    s.type = "module"
     s.onload = function() {
         this.remove();
     };
     (document.head || document.documentElement).appendChild(s);
 }
-injectScript('inject/zhihu.js')
+
 injectScript('inject/ajax.js')
+injectScript('inject/main.js')
+
+// 1. This window.ht1 could be read by document_end.js
+// 2. But window.ht1 is isolated with tab's window.
+Window.prototype.ht1 = 'ht1';

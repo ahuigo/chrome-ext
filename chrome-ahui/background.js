@@ -1,4 +1,7 @@
-// background.js
+/**
+ * How to debug background.js?
+ *  click `Inspect views: service worker` on extension page
+ */
 import rules from "./background/rules.js"
 
 /* 1. modifying headers of request
@@ -12,10 +15,10 @@ chrome.declarativeNetRequest.updateDynamicRules({
 /** 
  * 2. storage: change color
  */
-let color = '#3aa757';
+const color = '#3aa757';
 chrome.runtime.onInstalled.addListener(() => {
-    console.dir(chrome.storage)
-  chrome.storage.sync.set({ color });
+  console.dir(chrome.storage)
+  chrome.storage.sync.set({ color }); //on installed
   console.log('background.js color set to %cgreen', `color: ${color}`);
 });
 

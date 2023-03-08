@@ -1,4 +1,6 @@
 button {
   border-radius: 2px;
 }
-
+.selected{
+    border: 5px solid;
+}
