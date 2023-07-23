@@ -64,9 +64,12 @@ async function cleanSelectors(selectors, hide=false){
 function cleanBilibili(){
     console.log('clean bilibili')
     const selectors = [
-        '#reco_list',//推荐
+        //'#biliMainHeader .mini-header',
+        //'#biliMainHeader .left-entry',
+        //'#biliMainHeader .right-entry',
+        '#biliMainHeader .right-entry--message',
+        //'.reco_list',//右侧推荐
         '#internationalHeader',
-        '#biliMainHeader',
         '#bili-header-container',
     ]
     cleanSelectors(selectors)
@@ -91,7 +94,9 @@ function cleanBilibili(){
         case 'www.baidu.com': cleanBaidu();break;
     }
     if(location.hostname.match(/\.bilibili\.com$/)){
-        cleanBilibili()
+        //cleanBilibili();
+        setTimeout(cleanBilibili,600);
+        //setTimeout(cleanBilibili,1500);
     }
     setTimeout(()=>{
         console.debug({c2:window._config});// undefined, 因为和tab 的window是隔离
@@ -108,6 +113,6 @@ function cleanBilibili(){
   Window.prototype.ht2 = ht2
   Object.prototype.ht3 = 'ht3'
   setTimeout(()=>{
-        console.debug({ht1:window.ht1, window_h2:window.ht2}); // 有值, 但是和tab的window 是隔离的
+        console.debug({ht1:window.ht1, window_h2:window.ht2}); // 有值, 但是与page的window 是隔离的
   }, 1000)
 })();
