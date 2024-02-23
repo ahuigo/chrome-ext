@@ -1,10 +1,11 @@
 # access inject.js example
 Refer: https://stackoverflow.com/questions/9602022/chrome-extension-retrieving-global-variable-from-webpage/9636008#9636008
 
-    contentinject.js ("run_at": "document_end" in manifest):
+contentinject.js ("run_at": "document_end", config this in manifest):
 
     var s = document.createElement('script');
-    s.src = chrome.extension.getURL('inject.js');
+    // s.src = chrome.extension.getURL('./inject.js');// deprecated
+    s.src = chrome.runtime.getURL('./inject.js');
     (document.head||document.documentElement).appendChild(s);
     s.onload = function() {
         s.remove();
