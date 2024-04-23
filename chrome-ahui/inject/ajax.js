@@ -1,349 +1,212 @@
+export function addSearchParams(params = {}, oriurl = undefined) {
+  const urlInfo = oriurl instanceof URL
+    ? oriurl
+    : new URL(oriurl || globalThis.location.href);
+  const searchParams = new globalThis.URLSearchParams(urlInfo.search);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null) {
+      searchParams.delete(key);
+    } else {
+      searchParams.set(key, "" + value);
+    }
+  });
+
+  urlInfo.search = searchParams.toString();
+  const url = urlInfo.toString();
+  return url;
+}
+
 /**
- * Ajax 接口封装
+ * @param headers
+ * @param key
+ * @param value
+ * @returns
  */
- class Ajax {
-  options = {
-      method: 'GET',
-      headers: {}
-  };
-
-  /**
-   * Request 请求
-   * @param {String} url
-   * @param {String:'get|post|put|delete|...'} method
-   * @param {Object} data   {key1:value1, key2:value2}
-   * @param {String} type 'json','form','urlencode'
-   * @param {Object} options 'fetch options'
-   */
-  static request(url, method = 'get', data = null, options = {}) {
-      const api = new Ajax();
-      api.url = url;
-      api.data = data;
-      api.type = 'json';
-      api.options = {
-          credentials: 'include', //omit if not send cookie
-          ...api.options,
-          ...options,
-          method: method.toUpperCase(),
-      };
-      return api;
+function addHeader(headers, key, value) {
+  if (headers instanceof Array) {
+    headers.push([key, value]);
+  } else if (headers instanceof Headers) {
+    headers.set(key, value);
+  } else {
+    // @ts-ignore:
+    headers[key] = value;
   }
+  return headers;
+}
 
-  /**
-   *  不发送cookie
-   */
-  disableCookie() {
-      delete this.options['credentials'];
-      return this;
+function addHeaders(headers, newHeaders) {
+  for (const [key, value] of Object.entries(newHeaders)) {
+    addHeader(headers, key, value);
   }
+  return headers;
+}
 
-  /**
-   * 准备参数
-   */
-  prepareReq() {
-      if (!this.hasPrepared) {
-          this.hasPrepared = true;
-      } else {
-          return this;
-      }
-      let options = this.options;
-      if (this.data) {
-          if (options.method.toLowerCase() === 'get') {
-              this.url = this.buildUri(this.url, this.buildQuery(this.data));
-          } else {
-              options['mode'] = 'cors';
-              switch (this.type) {
-                  case 'form':
-                      options.body = this.buildBody(this.data);
-                      break;
-                  case 'urlencode':
-                      this.addHeader({ 'Content-Type': 'application/x-www-form-urlencoded' });
-                      options.body = this.buildQuery(this.data);
-                      break;
-                  case 'json':
-                      this.addHeader({ 'Content-Type': 'application/json' });
-                      options.body = JSON.stringify(this.data);
-                      break;
-              }
-              this.options = options;
-          }
-      }
-      return this;
-  }
-
-  /**
-   * 开启 debug 输出
-   */
-  debug() {
-      this.prepareReq();
-      console.debug('request params:', {
-          url: this.url,
-          data: this.data,
-          options: this.options,
-          type: this.type,
-      });
-      return this;
-  }
-
-  /**
-   * 设置fetch 选项
-   * @param {*} options
-   */
-  setOption(options) {
-      this.options = { ...this.options, ...options };
-      return this;
-  }
-
-  /**
-   * 获取结果 .then(res=>console.log(res))
-   * @param {Function} successHandler
-   * @returns Promise<any>
-   */
-  then(successHandler, errorHandler) {
-      this.prepareReq();
-      return new Promise((resolve, reject) => {
-          fetch(this.url, this.options).then(async (response) => {
-              var res;
-              // if (response.status === 401) {
-              //     User.login();
-              // }
-              res = await this.parseResponse(response)
-              if (!response.ok) {
-                  throw (res && res.message) ? res : new Error(JSON.stringify(res))
-              }
-              resolve(successHandler ? successHandler(res) : res)
-          }).catch(e => {
-              this.error(e);
-              if (errorHandler) {
-                  return resolve(errorHandler(e))
-              }
-              //reject(e)
-          })
-      })
-  }
-
-  /**
-   * 捕获错误
-   * @param {*} errorHandler 
-   */
-  catch(errorHandler) {
-      return this.then(null, errorHandler)
-  }
-
-
-  /**
-   * 解析响应
-   * @param {*} response
-   * @param {*} resolve
-   */
-  async parseResponse(response) {
-      var res;
-      const contentType = response.headers.get('Content-Type');
-      if (contentType != null) {
-          if (this.parseType === 'geojson') {
-              const text = await response.text();
-              res = this.parseGeojson(text);
-          } else if (contentType.indexOf('form') > -1) {
-              res = await response.formData();
-          } else if (contentType.indexOf('video') > -1) {
-              res = await response.blob();
-          } else if (contentType.indexOf('json') > -1) {
-              res = await response.json();
-          } else {
-              let res_tmp = await response.text();
-              try {
-                  res = JSON.parse(res_tmp)
-              } catch (e) {
-                  res = res_tmp
-              }
-          }
-      }
-      return res;
-  }
-
-  /**
-   * @abstract parse osm xml
-   * @param {String} xml
-   */
-  parseGeojson(xml) {
-      return xml;
-      // const parser = new DOMParser();
-      // window.xml = xml; //debug
-      // const geojson = osmtogeojson(parser.parseFromString(xml, 'text/xml'), {
-      //     flatProperties: false
-      // });
-      // return geojson;
-  }
-
-  /**
-   *
-   * @param {String} type 'json|form|urlencode'
-   */
-  setType(type = 'json') {
-      this.type = type;
-      return this;
-  }
-
-  /**
-   * 添加header头
-   * @param {Object} headers {'Content-Type':'application/text'}
-   */
-  addHeader(headers) {
-      this.options.headers = { ...this.options.headers, ...headers };
-  }
-
-  /**
-   * parseGeoJson
-   */
-  enableGeojson() {
-      this.parseType = 'geojson';
-      return this;
-  }
-
-  /**
-   *
-   * @param {String} type
-   */
-  setParseType(type = 'json') {
-      this.parseType = type;
-      return this;
-  }
-
-  /**
-   * @abstract 禁止错误弹窗
-   */
-  disablePopupError() {
-      this.noPopupError = true;
-      return this;
-  }
-
-  /**
-   * @abstract KeepPopupError
-   */
-  keepPopupError() {
-      this.isKeepPopupError = true;
-      return this;
-  }
-
-  /**
-   * Build URLSearachParams
-   * @param {Object} params
-   */
-  buildQuery(params) {
-      if (typeof params === 'string') {
-          return params;
-      }
-      return Object.entries(params)
-          .map(([key, value]) => {
-              if (value instanceof Date) {
-                  return encodeURIComponent(key) + '=' + value.toISOString()
-              }
-              if (value == null) {
-                  return ""
-              }
-              return encodeURIComponent(key) + '=' + encodeURIComponent(value);
-          })
-          .join('&');
-  }
-
-  /**
-   *
-   * @param {String} url
-   * @param {String} query
-   */
-  buildUri(url, query) {
-      url += url.indexOf('?') > 0 ? '' : '?';
-      url += url.endsWith('&') || url.endsWith('?') ? query : '&' + query;
-      if (this.options.cache === false) {
-          url += `&_=${Date.now()}`;
-      }
-      return url;
-  }
-
-  /**
-   * Build body
-   * @param {Object|string} data
-   */
-  buildBody(data) {
-      // this.addHeader({ 'Content-Type': 'application/octet-stream' });
-      // options.body = options.file
-      let fd;
-      if (Object.prototype.toString.call(data) === '[object Object]') {
-          fd = new FormData();
-          for (var k in data) {
-              if (data[k] instanceof FileList || data[k] instanceof Array) {
-                  for (var v of data[k]) fd.append(k + '[]', v);
-              } else {
-                  fd.append(k, data[k]);
-              }
-          }
-      } else {
-          fd = data;
-      }
-      return fd;
-  }
-
-  /**
-   * @abstract 弹出错误
-   * @param {*} msg
-   * @param {*} data
-   */
-  error(e) {
-      console.debug({ error: e });
-      if (this.noPopupError) {
-          return;
-      }
-      if (Ajax.errorHandler) {
-          const msg = (e && e.message) || e;
-          Ajax.errorHandler(msg)
-
-      }
-  }
-  static onErrorHandler(callback) {
-      this.errorHandler = callback;
+class Callable extends Function {
+  constructor() {
+    super("return arguments.callee._call(...arguments)");
   }
 }
-window.Ajax = Ajax;
-setTimeout(()=>{
-    console.debug({chrome_ajax:window._config})
-},5000)
-// Ajax.onErrorHandler(msg => {
-//     Notify.error(msg);
-// })
-// export default Ajax;
 
+class FetchFactory extends Callable {
+  #defaultInit = {};
+  #responseHandler;
+  #errorHandler;
+  #fetchTracer;
+
+  constructor(defaultInit, responseHandler, errorHandler) {
+    super();
+    this.#defaultInit = defaultInit || {};
+    this.#responseHandler = responseHandler;
+    this.#errorHandler = errorHandler;
+  }
+
+  setResponseHandler(handler) {
+    this.#responseHandler = handler;
+  }
+
+  // fetch
+  async _call(input, init) {
+    if (init?.data) {
+      if (
+        typeof init.data === "string" ||
+        init.data instanceof URLSearchParams
+      ) {
+        init.headers = addHeader(
+          init?.headers ?? {},
+          "Content-Type",
+          "application/x-www-form-urlencoded",
+        );
+        init.body = init.data;
+      } else if (init.data instanceof FormData || init.data instanceof Blob) {
+        init.body = init.data;
+      } else {
+        init.json = init.data;
+      }
+      delete init.data;
+    }
+    if (init?.params) {
+      input = addSearchParams(init.params, input);
+      delete init.params;
+    }
+    if (init?.json) {
+      init.headers = addHeader(
+        init?.headers ?? {},
+        "Content-Type",
+        "application/json",
+      );
+      init.body = JSON.stringify(init.json);
+      delete init.json;
+    }
+    const newinit = { ...this.#defaultInit, ...(init || {}) };
+    const req = new Request(input, newinit);
+    try {
+      let response;
+      if (this.#fetchTracer) {
+        response = await this.#fetchTracer(req);
+      } else {
+        response = await fetch(req);
+      }
+      const handledResp = this.#responseHandler(response, req);
+      return handledResp;
+    } catch (e) {
+      this.#errorHandler(e, req);
+      return Promise.reject(e);
+    }
+  }
+
+  withHeader(key, value) {
+    this.#defaultInit.headers = addHeader(
+      this.#defaultInit.headers ?? {},
+      key,
+      value,
+    );
+    return this;
+  }
+
+  withTracer(tracer) {
+    this.#fetchTracer = tracer;
+  }
+
+  get(url, init) {
+    const options = Object.assign({ method: "GET" }, init);
+    return this._call(url, options);
+  }
+  post(url, init) {
+    const options = Object.assign({ method: "POST" }, init);
+    return this._call(url, options);
+  }
+  delete(url, init) {
+    const options = Object.assign({ method: "DELETE" }, init);
+    return this._call(url, options);
+  }
+  put(url, init) {
+    const options = Object.assign({ method: "PUT" }, init);
+    return this._call(url, options);
+  }
+  patch(url, init) {
+    const options = Object.assign({ method: "PUT" }, init);
+    return this._call(url, options);
+  }
+}
+
+const PolicyDict = {
+  // Referer will never be set.
+  NoReferer: "no-referrer",
+
+  // Referer will not be set when navigating from HTTPS to HTTP.
+  NoRefererWhenDowngrade: "no-referrer-when-downgrade",
+
+  // Full Referer for same-origin requests, and no Referer for cross-origin requests.
+  SameOrigin: "same-origin",
+
+  // Referer will be set to just the origin, omitting the URL's path and search.
+  Origin: "origin",
+
+  // Referer will be set to just the origin except when navigating from HTTPS to HTTP,
+  // in which case no Referer is sent.
+  StrictOrigin: "strict-origin",
+
+  // Full Referer for same-origin requests, and bare origin for cross-origin requests.
+  OriginWhenCrossOrigin: "origin-when-cross-origin",
+
+  // Full Referer for same-origin requests, and bare origin for cross-origin requests
+  // except when navigating from HTTPS to HTTP, in which case no Referer is sent.
+  StrictOriginWhenCrossOrigin: "strict-origin-when-cross-origin",
+
+  // Full Referer for all requests, whether same- or cross-origin.
+  UnsafeUrl: "unsafe-url",
+};
 
 /**
- * @param {*} url 
- * @param {*} method 
- * @param {*} params 
- * @param {*} data 
- * @returns 
+ * @param {*} url
+ * @param {*} method
+ * @param {*} params
+ * @param {*} data
+ * @returns
  */
-function fetchX(method='get', url, params=null, data=null){
-    const options = {
-        credentials: "include",
-        mode:"cors",
-        method: method,
-        headers : new Headers(),
-    }
-        /*
+function fetchX(method = "get", url, params = null, data = null) {
+  const options = {
+    credentials: "include",
+    mode: "cors",
+    method: method,
+    headers: new Headers(),
+  };
+  /*
         headers: {
             'X-requested-with': 'XMLHttpRequest',
-            "Accept": "application/json", 
-            //'content-type':'application/x-www-form-urlencode', 
+            "Accept": "application/json",
+            //'content-type':'application/x-www-form-urlencode',
         }, */
-    if(data){
-        const body=new FormData() //不能是object!!!!!
-        for(const [k,v] of Object.entries(data)){
-            body.append(k,v)
-        }
-        options.body = body;
+  if (data) {
+    const body = new FormData(); //不能是object!!!!!
+    for (const [k, v] of Object.entries(data)) {
+      body.append(k, v);
     }
+    options.body = body;
+  }
 
-    return fetch(url, options)
+  return fetch(url, options);
 }
-
 
 /**
     fetch('http://localhost:5001').then(response=>response.json()).then(json=>{
@@ -351,25 +214,24 @@ function fetchX(method='get', url, params=null, data=null){
     })
 */
 
-
 /**
- * sends a request to the specified url via a form. 
+ * sends a request to the specified url via a form.
  */
-function requestForm( method = 'post', url, data) {
+function requestForm(method = "post", url, data) {
   // The rest of this code assumes you are not using a library.
   // It can be made less verbose if you use one.
-  const form = document.createElement('form');
+  const form = document.createElement("form");
   form.method = method;
   form.action = url;
 
-  if(data){
-      for (const [key, value] of Object.entries(data)) {
-        const hiddenField = document.createElement('input');
-        hiddenField.type = 'hidden';
-        hiddenField.name = key;
-        hiddenField.value = value;
-        form.appendChild(hiddenField);
-      }
+  if (data) {
+    for (const [key, value] of Object.entries(data)) {
+      const hiddenField = document.createElement("input");
+      hiddenField.type = "hidden";
+      hiddenField.name = key;
+      hiddenField.value = value;
+      form.appendChild(hiddenField);
+    }
   }
   document.body.appendChild(form);
   form.submit();

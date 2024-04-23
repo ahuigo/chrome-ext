@@ -1,63 +1,66 @@
 {
-    "name": "ahuigo dev",
-    "version": "0.0.1",
-    "description": "ahui dev",
-    "minimum_chrome_version": "96",
-    "manifest_version": 3,
-    "background": {
-      "service_worker": "background.js",
-      "type": "module"
+  "name": "ahuigo dev",
+  "version": "0.0.1",
+  "description": "ahui dev",
+  "minimum_chrome_version": "100",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "js": ["document_stackoverflow.js"],
+      "matches": [
+        "https://stackoverflow.com/*",
+        "https://*.stackoverflow.com/*",
+        "https://superuser.com/*",
+        "https://serverfault.com/*",
+        "https://*.stackexchange.com/*"
+      ]
     },
-    "content_scripts": [
-      {
-        "js": ["document_stackoverflow.js"],
-        "matches": [
-            "https://stackoverflow.com/*",
-            "https://*.stackoverflow.com/*",
-            "https://superuser.com/*",
-            "https://serverfault.com/*",
-            "https://*.stackexchange.com/*"
-        ]
-      },
-      {
-            "matches": ["<all_urls>"],
-            "js": ["document_start.js"],
-            "run_at": "document_start" //default document end
-      },
-      {
-          "matches": ["<all_urls>"],
-          "js": ["document_end.js"],
-          "run_at": "document_end",
-          "exclude_matches": [
-            "http://localhost/",
-            "http://m/"
-            ]
-        }
-    ],
-    "web_accessible_resources": [{
-      "resources": [
-        "inject/cookie.js",
-        "inject/*"
-      ],
-      "matches": ["<all_urls>"]
-    }],
-
-    "action": {
-      "default_popup": "popup.html"
+    {
+      "matches": ["<all_urls>"],
+      "js": ["document_start.js"],
+      "run_at": "document_start" //default document end
     },
-    "options_page": "options.html",
-
-    "host_permissions": [
-        "https://*/*",
-        "http://*/*"
+    {
+      "matches": ["<all_urls>"],
+      "js": ["document_end.js"],
+      "run_at": "document_end",
+      "exclude_matches": [
+        "http://localhost/",
+        "http://m/"
+      ]
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": [
+      "inject/cookie.js",
+      "inject/*"
     ],
-    "permissions": [
-        "declarativeNetRequest",
-        "declarativeNetRequestWithHostAccess", //allow cors
-        "declarativeNetRequestFeedback",
-        "tabs",
-      "contextMenus",
-      "storage", "activeTab", "scripting"
+    "matches": ["<all_urls>"]
+  }],
 
-    ]
-  }
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "options_page": "options/options.html",
+
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess", //allow cors
+    "declarativeNetRequestFeedback",
+    "tabs",
+    "contextMenus",
+    "storage",
+    "activeTab",
+    "tabs",
+    "scripting",
+    "webNavigation"
+  ]
+}
