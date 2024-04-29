@@ -16,13 +16,22 @@ export function addSearchParams(params = {}, oriurl = undefined) {
   return url;
 }
 
+function hasHeader(headers, key) {
+  if (headers instanceof Array) {
+    return headers.some(([k]) => k === key);
+  } else if (headers instanceof Headers) {
+    return headers.has(key);
+  } else {
+    return key in headers;
+  }
+}
 /**
  * @param headers
  * @param key
  * @param value
  * @returns
  */
-function addHeader(headers, key, value) {
+function setHeader(headers, key, value) {
   if (headers instanceof Array) {
     headers.push([key, value]);
   } else if (headers instanceof Headers) {
@@ -34,9 +43,9 @@ function addHeader(headers, key, value) {
   return headers;
 }
 
-function addHeaders(headers, newHeaders) {
+function setHeaders(headers, newHeaders) {
   for (const [key, value] of Object.entries(newHeaders)) {
-    addHeader(headers, key, value);
+    setHeader(headers, key, value);
   }
   return headers;
 }
@@ -63,24 +72,53 @@ class FetchFactory extends Callable {
   setResponseHandler(handler) {
     this.#responseHandler = handler;
   }
+  withResponseHandler(handler) {
+    return new FetchFactoryAlias(
+      this.#defaultInit,
+      handler,
+      this.#errorHandler,
+    );
+  }
+  withErrorHandler(errHandler) {
+    return new FetchFactoryAlias(
+      this.#defaultInit,
+      this.#responseHandler,
+      errHandler,
+    );
+  }
 
   // fetch
   async _call(input, init) {
     if (init?.data) {
       if (
         typeof init.data === "string" ||
+        init.data instanceof ArrayBuffer ||
+        init.data instanceof Number ||
+        typeof init.data === "number" ||
         init.data instanceof URLSearchParams
       ) {
-        init.headers = addHeader(
+        if (!hasHeader(init?.headers ?? {}, "Content-Type")) {
+          init.headers = setHeader(
+            init?.headers ?? {},
+            "Content-Type",
+            "application/x-www-form-urlencoded",
+          );
+        }
+        init.body = `${init.data}`;
+      } else if (init.data instanceof FormData || init.data instanceof Blob) {
+        init.body = init.data;
+      } else {
+        init.headers = setHeader(
           init?.headers ?? {},
           "Content-Type",
           "application/x-www-form-urlencoded",
         );
-        init.body = init.data;
-      } else if (init.data instanceof FormData || init.data instanceof Blob) {
-        init.body = init.data;
-      } else {
-        init.json = init.data;
+        init.body = Object.entries(init.data)
+          .map(
+            ([key, val]) =>
+              encodeURIComponent(key) + "=" + encodeURIComponent(val),
+          )
+          .join("&");
       }
       delete init.data;
     }
@@ -88,8 +126,8 @@ class FetchFactory extends Callable {
       input = addSearchParams(init.params, input);
       delete init.params;
     }
-    if (init?.json) {
-      init.headers = addHeader(
+    if (init?.json !== undefined) {
+      init.headers = setHeader(
         init?.headers ?? {},
         "Content-Type",
         "application/json",
@@ -115,7 +153,7 @@ class FetchFactory extends Callable {
   }
 
   withHeader(key, value) {
-    this.#defaultInit.headers = addHeader(
+    this.#defaultInit.headers = setHeader(
       this.#defaultInit.headers ?? {},
       key,
       value,
@@ -149,7 +187,12 @@ class FetchFactory extends Callable {
   }
 }
 
-const PolicyDict = {
+const FetchFactoryAlias = FetchFactory;
+
+export { FetchFactoryAlias as FetchFactory };
+export default FetchFactory;
+
+export const PolicyDict = {
   // Referer will never be set.
   NoReferer: "no-referrer",
 
@@ -177,62 +220,33 @@ const PolicyDict = {
   UnsafeUrl: "unsafe-url",
 };
 
-/**
- * @param {*} url
- * @param {*} method
- * @param {*} params
- * @param {*} data
- * @returns
- */
-function fetchX(method = "get", url, params = null, data = null) {
-  const options = {
-    credentials: "include",
-    mode: "cors",
-    method: method,
-    headers: new Headers(),
-  };
-  /*
-        headers: {
-            'X-requested-with': 'XMLHttpRequest',
-            "Accept": "application/json",
-            //'content-type':'application/x-www-form-urlencode',
-        }, */
-  if (data) {
-    const body = new FormData(); //不能是object!!!!!
-    for (const [k, v] of Object.entries(data)) {
-      body.append(k, v);
-    }
-    options.body = body;
-  }
-
-  return fetch(url, options);
-}
-
-/**
-    fetch('http://localhost:5001').then(response=>response.json()).then(json=>{
-        vm.products=json.products
-    })
+/*
+Object.values(PolicyDict).forEach(policy => {
+  fetch(url, {referrerPolicy: policy});
+});
 */
 
-/**
- * sends a request to the specified url via a form.
- */
-function requestForm(method = "post", url, data) {
-  // The rest of this code assumes you are not using a library.
-  // It can be made less verbose if you use one.
-  const form = document.createElement("form");
-  form.method = method;
-  form.action = url;
-
-  if (data) {
-    for (const [key, value] of Object.entries(data)) {
-      const hiddenField = document.createElement("input");
-      hiddenField.type = "hidden";
-      hiddenField.name = key;
-      hiddenField.value = value;
-      form.appendChild(hiddenField);
-    }
+export const fetchx = new FetchFactory(
+  {
+    mode: "cors",
+    credentials: "include", // include cookie
+  },
+  function responseDefaultHandler(response, request) {
+    return Promise.resolve(response);
+  },
+  function errorHandler(err, req) {
+    const url = req.url;
+    const msg = `can't access: ${url.slice(0, 200)}\n`;
+    console.error(msg, err);
+    throw Error(err);
+  },
+);
+// window.addSearchParams = addSearchParams;
+window.fetchx = fetchx;
+window.fetchjson = fetchx.withResponseHandler(async (response, req) => {
+  if (response.ok) {
+    return response.json();
+  } else {
+    throw new Error(response.statusText);
   }
-  document.body.appendChild(form);
-  form.submit();
-}
+});

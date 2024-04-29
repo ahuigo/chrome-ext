@@ -13,9 +13,7 @@ function injectScript(src) {
   (document.head || document.documentElement).appendChild(s);
 }
 
-injectScript("inject/ajax.js");
 injectScript("inject/main.js");
-injectScript("inject/cookie.js");
 
 // 1. This window.ht1 could be read by document_end.js
 // 2. But window.ht1 is isolated with tab's window.

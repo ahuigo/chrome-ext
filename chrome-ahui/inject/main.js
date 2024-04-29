@@ -1,6 +1,10 @@
 // this main.js is injected by document_start.js
 import { initUA, initUaEdge } from "./init-ua.js";
 import * as zhihu from "./zhihu.js";
+import "./ajax.js";
+import "./cookie.js";
+// injectScript("inject/ajax.js");
+// injectScript("inject/cookie.js");
 
 (function init() {
   switch (location.hostname) {
