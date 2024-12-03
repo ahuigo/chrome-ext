@@ -9,16 +9,16 @@
     "type": "module"
   },
   "content_scripts": [
-    {
-      "js": ["document_stackoverflow.js"],
-      "matches": [
-        "https://stackoverflow.com/*",
-        "https://*.stackoverflow.com/*",
-        "https://superuser.com/*",
-        "https://serverfault.com/*",
-        "https://*.stackexchange.com/*"
-      ]
-    },
+    // {
+    //   "js": ["document_stackoverflow.js"],
+    //   "matches": [
+    //     "https://stackoverflow.com/*",
+    //     "https://*.stackoverflow.com/*",
+    //     "https://superuser.com/*",
+    //     "https://serverfault.com/*",
+    //     "https://*.stackexchange.com/*"
+    //   ]
+    // },
     {
       "matches": ["<all_urls>"],
       "js": ["document_start.js"],
@@ -61,6 +61,8 @@
     "activeTab",
     "tabs",
     "scripting",
+    "webRequest",
+    "webRequestBlocking", //manifest v3　不支持
     "webNavigation"
   ]
 }

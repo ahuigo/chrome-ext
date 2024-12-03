@@ -1,13 +1,17 @@
+// doc2: https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest?hl=zh-cn
+//  “declarativeNetRequest”和“declarativeNetRequestWithHostAccess”权限 它们的功能相同两者的区别在于 请求或同意: 只能改headers，不能改body
 const allResourceTypes = Object.values(
   chrome.declarativeNetRequest.ResourceType,
 );
 
-// chrome.declarativeNetRequest.Rule[]
+// https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest#type-RuleActionType
+// 支持: BLOCK, ALLOW, MODIFY_HEADERS, REDIRECT
 const rules = [
   {
     id: 1,
     priority: 1,
     action: {
+      // modify request header1
       type: chrome.declarativeNetRequest.RuleActionType.MODIFY_HEADERS,
       requestHeaders: [
         {
@@ -18,8 +22,8 @@ const rules = [
       ],
     },
     condition: {
-      // http://m:4500/dump/modify-request-header
-      urlFilter: "https://www.bing21.com/",
+      urlFilter: "http://m:4500/dump/modify-request-header",
+      // urlFilter: "https://www.bing21.com/",
       resourceTypes: allResourceTypes,
     },
   },
@@ -27,6 +31,7 @@ const rules = [
     id: 2,
     priority: 1,
     action: {
+      // add response header
       type: chrome.declarativeNetRequest.RuleActionType.MODIFY_HEADERS,
       responseHeaders: [
         {

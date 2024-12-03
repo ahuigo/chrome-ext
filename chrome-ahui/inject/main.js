@@ -2,6 +2,7 @@
 import { initUA, initUaEdge } from "./init-ua.js";
 import * as zhihu from "./zhihu.js";
 import "./ajax.js";
+//import "./fetch-rewrite.js";
 import "./cookie.js";
 // injectScript("inject/ajax.js");
 // injectScript("inject/cookie.js");

@@ -3,6 +3,7 @@
  *  click `Inspect views: service worker` on extension page
  */
 import "./background/rewrite-header.js";
+// import "./background/rewrite-body.js";
 import "./background/lifetime-ext.js";
 import "./background/storage.js";
 import "./background/store.js";
