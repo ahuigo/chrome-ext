@@ -1,4 +1,7 @@
-/* see: 
+/* 
+extension example:
+- ModHeader: https://chromewebstore.google.com/detail/ModHeader%20-%20Modify%20HTTP%20headers/idgpnmonknjnojddfkpgkljpfnnfcklj?hl=en
+doc: 
 - https://developer.chrome.com/docs/extensions/reference/api/declarativeNetRequest?hl=zh-cn
 - https://juejin.cn/post/7131360582325780510
 
